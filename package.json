@@ -9,7 +9,6 @@
         "kcors": "^2.2.1",
         "koa": "^2.3.0",
         "koa-bodyparser": "^4.2.0",
-        "koa-jwt": "^3.2.2",
         "koa-router": "^7.2.1",
         "promise-mysql": "^3.0.2"
     }

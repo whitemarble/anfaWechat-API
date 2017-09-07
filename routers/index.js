@@ -1,45 +1,58 @@
-const router = require('koa-router')()
+const router = require('koa-router')();
+const jwt = require("jsonwebtoken");
 
-const home = require('./home')
-const api = require('./api')
-const page = require('./page')
+const home = require('./home');
+const checkin = require('./checkin');
+const show_checkin = require('./show-checkin');
+const register = require('./register');
+const checkuser = require('./checkuser');
 
-router.use('/', home.routes(), home.allowedMethods())
-router.use('/api', api.routes(), api.allowedMethods())
-router.use('/page', page.routes(), page.allowedMethods())
+const user = require('./user');
 
-
-const customerService = require('./customerService');
-const jwt = require('../middlewares/jwt');
 const authenticate = require('../middlewares/authenticate');
-const jwtO = require("jsonwebtoken");
 
-router.get('/customer', (ctx,next)=> {
-    //let token = ctx.request.headers['authorization'];
-    //token = token.replace('bearer ', '')
-    //console.log(token)
-    //let uuuu = jwtO.verify(token, 'A very secret key');
-    //console.log(uuuu)
-    ctx.body = customerService.getCustomers();
+
+router.use('/', home.routes(), home.allowedMethods());
+router.get('/checkin/:id',(ctx)=>{
+    ctx.body = checkin(ctx.params.id);
+});
+router.post('/register',(ctx)=>{
+    ctx.body = register(ctx.request.body);
+});
+router.get('./checkuser/:id',(ctx)=>{
+    ctx.body = checkuser(ctx.params.id);
+});
+router.get('./show_checkin',(ctx)=>{
+    ctx.body = show_checkin.first();
+});
+router.get('./show_checkin/:id',(ctx)=>{
+    ctx.body = show_checkin.user(ctx.params.id);
+});
+router.get('./show_checkin/page/:index',(ctx)=>{
+    ctx.body = show_checkin.page(ctx.params.index);
 });
 
-router.get('/customer/:id', jwt,(ctx,next) =>{
-    if (customerService.getCustomer(ctx.params.id)) {
-        ctx.body = customerService.getCustomer(ctx.params.id);
-    }
-    else {
-        ctx.status = 404;
-        ctx.body = {"error": "There is no customer with that id"};
-    }
-});
 
-router.post('/customer', jwt,(ctx,next) =>{
-    ctx.body = customerService.postCustomer(ctx.request.body);
-});
 
+//For admin dashbord---------------------------------------------------------
 router.post('/login', async (ctx,next) =>{
     await authenticate(ctx);
 });
+router.get('./user',(ctx)=>{
+    //let token = ctx.request.headers['authorization'];
+    //token = token.replace('bearer ', '')
+    //console.log(token)
+    //let uuuu = jwt.verify(token, 'A very secret key');
+    //console.log(uuuu)
+    ctx.body = user.first();
+});
+router.get('./user/:id',(ctx)=>{
+    ctx.body = user.user(ctx.params.id);
+});
+router.get('./user/page/:index',(ctx)=>{
+    ctx.body = user.page(ctx.params.index);
+});
+
 
 
 

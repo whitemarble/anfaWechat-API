@@ -1,10 +1,10 @@
 const mysql = require('promise-mysql');
 
 const pool = mysql.createPool({
-  host: '45.76.196.36',
-  user: 'nebulahu_admin',
-  password: 'WorldFence73',
-  database: 'nebulahu_epayment'
+  host: '45.76.208.8',
+  user: 'myalpha_admin',
+  password: 'Anfa@2016',
+  database: 'myalpha_wechat'
 })
 
 
