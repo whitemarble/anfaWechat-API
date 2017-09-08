@@ -8,8 +8,9 @@ const register = require('./register');
 const checkuser = require('./checkuser');
 
 const user = require('./user');
+const login = require('./login');
 
-const authenticate = require('../middlewares/authenticate');
+//const authenticate = require('../middlewares/authenticate');
 
 
 router.use('/', home.routes(), home.allowedMethods());
@@ -34,10 +35,14 @@ router.get('./show_checkin/page/:index',(ctx)=>{
 
 
 
+
 //For admin dashbord---------------------------------------------------------
-router.post('/login', async (ctx,next) =>{
-    await authenticate(ctx);
+router.post('/login',async (ctx)=>{
+    ctx.body = await login(ctx.request.body);
 });
+/*router.post('/login', async (ctx,next) =>{
+    await authenticate(ctx);
+});*/
 router.get('./user',(ctx)=>{
     //let token = ctx.request.headers['authorization'];
     //token = token.replace('bearer ', '')
