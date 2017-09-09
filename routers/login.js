@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const {pool}  = require('../async-db');
+const secretkey = require("../secretkey").secretkey;
 const bcrypt = require('bcrypt');
 
 const selectUser = async(id) => {
@@ -8,7 +9,7 @@ const selectUser = async(id) => {
     return dataList
 }
 
-const secretkey = "asidfu%^yg23987rgu%ykgvqw";
+
 
 module.exports = async (data) =>{
     let result = await selectUser(data.username);
@@ -17,10 +18,11 @@ module.exports = async (data) =>{
         token: "",
         message: "User not found"
     };
+    console.log(secretkey)
     if(result.length === 1){
         if(bcrypt.compareSync(data.password, result[0].user_pass)){
             body.code = 200;
-            body.token = jwt.sign({ username: data.username, role: result[0].role }, secretkey);
+            body.token = jwt.sign({ username: data.username, role: result[0].role }, secretkey, { expiresIn: '48h' });
             body.message = "Successfully logged in!";
         }else{
             body.code = 401;

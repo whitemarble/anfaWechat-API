@@ -1,0 +1,1 @@
+exports.secretkey = "asidfu%^yg23987rgu%ykgvqw";
